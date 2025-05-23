@@ -1,0 +1,11 @@
+# daloRADIUS users interface port
+export DALORADIUS_USERS_PORT=80
+
+# daloRADIUS operators interface port
+export DALORADIUS_OPERATORS_PORT=8000
+
+# daloRADIUS package root directory
+export DALORADIUS_ROOT_DIRECTORY=/var/www/daloradius  
+
+# daloRADIUS administrator's email
+export DALORADIUS_SERVER_ADMIN=admin@daloradius.local
