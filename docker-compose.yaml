@@ -1,0 +1,76 @@
+version: '3.8'
+
+networks:
+  nac_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+
+services:
+        #  postgres:
+        #    image: docker.eehub.cyou/library/postgres:14.18
+        #    container_name: nac_postgres
+        #    restart: unless-stopped
+        #    ports:
+        #      - "15523:5432"
+        #    environment:
+        #      POSTGRES_DB: radius
+        #      POSTGRES_USER: radius
+        #      POSTGRES_PASSWORD: eZU6sc2HArRn
+        #    volumes:
+        #      - ./pgdata:/var/lib/postgresql/data
+        #      - ./init-sql/postgres:/docker-entrypoint-initdb.d
+        #    networks:
+        #      nac_net:
+        #        ipv4_address: 172.30.0.10
+  mysql:
+    image: registry.cn-beijing.aliyuncs.com/sleegod/mysql:8.0.30-debian
+    container_name: nac_mysql
+    restart: unless-stopped
+    ports:
+      - "15406:3306"
+    environment:
+      MYSQL_DATABASE: radius
+      MYSQL_USER: radius
+      MYSQL_PASSWORD: eZU6sc2HArRn
+      MYSQL_ROOT_PASSWORD: DFIJeV8DcvfC  # 可自定义
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+      - ./init-sql/mysql:/docker-entrypoint-initdb.d
+    networks:
+      nac_net:
+        ipv4_address: 172.30.0.15
+
+  freeradius:
+    image: docker.eehub.cyou/freeradius/freeradius-server:3.2.7
+    container_name: nac_radius
+    restart: unless-stopped
+    command: ["radiusd", "-X"]
+    depends_on:
+      - mysql
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+    volumes:
+      - ./etc/freeradius:/etc/freeradius
+    networks:
+      nac_net:
+        ipv4_address: 172.30.0.20
+
+  daloradius:
+    image: registry.cn-beijing.aliyuncs.com/sleegod/daloradius:v1.4
+    container_name: nac_daloradius
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+    # - "26580:80"
+      - "26800:8000"
+    volumes:
+      - ./apache/daloradius.conf.php:/var/www/daloradius/app/common/includes/daloradius.conf.php
+      - ./logs/daloradius:/var/www/daloradius/var/log
+      - ./logs/other:/var/log
+    networks:
+      nac_net:
+        ipv4_address: 172.30.0.30
