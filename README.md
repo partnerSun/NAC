@@ -10,6 +10,10 @@ docker-compose up -d
 ```shell
 mysql -u radius -p radius < 02-daloradius.sql
 ```
+- 创建日志目录
+```
+mkdir -p ./logs/other/apache2/daloradius/operators ./logs/other/apache2/daloradius/users ./logs/daloradius
+```
 
 ### 访问
 - http://ip:26800
