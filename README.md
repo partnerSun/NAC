@@ -34,11 +34,12 @@ read_clients = yes
 client_table = "nas"
 ```
 
-- 添加 RADIUS 认证的共享密钥和允许的网段（此处添加的是容器网段）:
+- 添加 RADIUS 认证的共享密钥和允许认证的客户端网段:
 vim ./etc/freeradius/clients.conf 
 ```shell
 client dockernet {
-        ipaddr = 172.30.0.0/16
+        #ipaddr = 172.30.0.0/16
+        ipaddr = *
         secret = eZU6sc2HArRn
 }
 
