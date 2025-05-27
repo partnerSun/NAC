@@ -204,3 +204,5 @@ DEFAULT	Hint == "SLIP"
 # See the example user "bob" above.                     #
 #########################################################
 
+# 允许所有用户认证通过（MAC地址也一样）,默认拒绝所有设备接入（白名单认证）
+# DEFAULT  Auth-Type := Accept

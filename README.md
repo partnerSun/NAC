@@ -72,4 +72,14 @@ mysql -u radius -p radius < 02-daloradius.sql
 ```
 docker build -t daloradius:v1.4 .
 ```
+## mac地址认证方案
+- 白名单认证（当前）: 通过修改etc/freeradius/users
+```
+#默认即为白名单模式
+#DEFAULT  Auth-Type := Accept
+```
+- guest VLAN + ACL 控制: 需关闭白名单模式
+```
 
+```
+- 打标 VLAN（给白名单设备分配业务网，非白名单分配访客网）配合交换机做隔离
